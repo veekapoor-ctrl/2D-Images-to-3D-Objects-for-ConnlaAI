@@ -1,6 +1,6 @@
 Overview
 
-Step-by-step, to convert a folder of JPG/JPEG images into individual binary glTF or (.glb) files using Python.
+convert a folder of JPG/JPEG images into individual binary glTF or (.glb) files using Python.
 
 The process:
 
