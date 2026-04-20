@@ -1,0 +1,56 @@
+Overview
+
+Step-by-step, to convert a folder of JPG/JPEG images into individual binary glTF or (.glb) files using Python.
+
+The process:
+
+Applies EXIF orientation so images are upright.
+Converts image colors to sRGB (best-effort using ImageCms when available, or falls back to convert("RGB")).
+Embeds the processed image bytes into a tiny GLB that contains a single textured plane scaled to the image aspect ratio.
+Produces one .glb file per input image.
+
+2. Requirements (what to install)
+
+Python 3.7+
+Pillow (for image handling and EXIF orientation)
+Install: pip install pillow
+Optional (recommended for color-managed conversions): Pillow with LCMS/ImageCms support
+If your Pillow build includes ImageCms, it enables ICC-profile-aware conversions.
+You can also provide an sRGB ICC file if you want explicit control (optional).
+
+Example install commands:
+
+pip install pillow
+
+# Optional: if you have a system package for lcms2, reinstall Pillow so it builds with ImageCms:
+# apt-get install liblcms2-dev  # Debian/Ubuntu (then reinstall pillow)
+# pip install --force-reinstall --no-binary :all: pillow
+
+
+3. Files & folders
+
+
+Input folder: images/ (put your .jpg/.jpeg files here)
+Output folder: out_glb/ (script will create this)
+
+4. Quick run (one-line)
+After you save the script as jpg_to_glb_srgb_full.py, run:
+
+Without explicit ICC file:
+
+
+python jpg_to_glb_srgb_full.py images out_glb
+
+With an explicit sRGB ICC profile (optional):
+
+
+python jpg_to_glb_srgb_full.py images out_glb /path/to/sRGB.icc
+
+5. What the script does
+
+Loads each JPG.
+Uses ImageOps.exif_transpose() to apply EXIF orientation.
+If ImageCms and an ICC profile are available, converts from the image's embedded profile (if present) to sRGB; otherwise uses convert("RGB").
+Re-encodes the processed pixels to a JPEG buffer (so the bytes embedded in GLB match final pixels).
+Builds a minimal glTF JSON describing a single mesh (a plane of correct aspect ratio), one material with baseColorTexture, and packs JSON + binary into GLB v2 binary format.
+Writes one .glb per input image.
