@@ -4,3 +4,4 @@ The Renaissance Digital Library is a flagship product of the ConnlaAI, a cultura
 
 Read the Step by Step guide for instructions.
 Required knowledge: https://www.blender.org/
+Example 3D Objects: https://wormhole.app/d9Qjd9#aOj5mv23fCf29T5E92OqoQ
