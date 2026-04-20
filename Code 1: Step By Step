@@ -1,0 +1,57 @@
+Step-by-step 
+
+Prepare environment
+
+Install dependencies:
+
+pip install pillow
+
+(Optional) Ensure Pillow has ImageCms by installing LCMS system libraries then reinstalling Pillow.
+
+2. Prepare folders
+
+Create an input folder and place your .jpg/.jpeg files there:
+mkdir images
+Copy images into images/.
+
+3. Save the script
+
+Save the code above to jpg_to_glb_srgb_full.py in the project folder.
+
+4. (Optional) Obtain an sRGB ICC profile
+
+If you have special color workflow requirements, download an sRGB ICC file (e.g., sRGB.icc) or use a system one. This is rarely required; ImageCms.createProfile("sRGB") often suffices.
+
+5. Run the script
+
+Basic:
+python jpg_to_glb_srgb_full.py images out_glb
+
+With explicit ICC:
+python jpg_to_glb_srgb_full.py images out_glb /path/to/sRGB.icc
+
+6.Verify output
+
+Inspect out_glb/ — there should be one .glb per input image.
+
+Open a few in a viewer:
+https://gltf-viewer.donmccurdy.com/
+https://sandbox.babylonjs.com/
+
+7. If colors look off
+
+Ensure images are already in sRGB or pass an ICC profile.
+Confirm viewers apply sRGB as expected — differing tone mapping or lighting in viewers can change appearance.
+If EXIF orientation was not applied earlier, the script applies it; verify rotated images are correct.
+
+
+8.Notes, caveats and further options
+
+Preserving exact original bytes: The script re-encodes to JPEG after orientation/profile conversion to embed the final pixel data. If you want to avoid re-encoding (preserve original compressed bytes), you'd need to:
+Apply rotation to byte stream yourself (harder), or
+Rotate pixels and reuse original compression (not generally possible without re-encoding).
+Transparency: JPEG has no alpha. Use PNG sources if you need transparency, adjust MIME to "image/png", and set "alphaMode": "BLEND" and material["doubleSided"]=True as needed.
+Multiple images in one GLB: If you prefer a single GLB containing all images as separate planes, the script can be adapted to create multiple meshes, materials, and nodes in one scene.
+Large images: Embedding large images will create large GLB files. Consider resizing ahead of embedding (use Pillow .resize()), or using lower JPEG quality.
+Index size limits: This script uses 16-bit indices (UNSIGNED_SHORT). For meshes with >65535 vertices you must use 32-bit indices.
+
