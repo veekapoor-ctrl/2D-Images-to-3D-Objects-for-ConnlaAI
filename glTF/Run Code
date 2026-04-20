@@ -1,0 +1,3 @@
+python jpeg_to_gltf.py input.jpg output.gltf --device cpu
+# or, if you have a CUDA GPU:
+python jpeg_to_gltf.py input.jpg output.gltf --device cuda
